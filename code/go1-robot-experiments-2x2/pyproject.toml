@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "go1-robot-experiments"
+version = "0.1.0"
+description = "Scientific weak-actuator experiments using the Go1 morphology core"
+requires-python = "==3.12.*"
+dependencies = [
+  "go1-morphology-core @ git+ssh://git@github.com/dh-you/go1-morphology-core.git@5c02a404f5b059be9ce074b896ea4997ddcf4818",
+  "numpy==2.5.1",
+  "playground[cuda] @ git+https://github.com/google-deepmind/mujoco_playground.git@220abb9d6a41eaa258047dacf9ca70a92e008b78",
+]
+
+[dependency-groups]
+analysis = [
+  "matplotlib==3.11.1",
+  "scipy==1.18.0",
+]
+dev = [
+  "pytest==9.1.1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/go1_robot_experiments"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.uv]
+constraint-dependencies = [
+  "tensorstore==0.1.84",
+  "trimesh==4.12.2",
+  "warp-lang==1.15.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

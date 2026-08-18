@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "go1-morphology-core"
+version = "1.0.0"
+description = "Frozen task-independent Go1 morphology policy core"
+readme = "README.md"
+requires-python = "==3.12.*"
+dependencies = [
+  "brax==0.14.2",
+  "flax==0.12.8",
+  "jax==0.11.0",
+  "jaxlib==0.11.0",
+  "numpy==2.5.1",
+  "orbax-checkpoint==0.12.1",
+]
+
+[project.urls]
+Repository = "https://github.com/dh-you/go1-morphology-core"
+
+[dependency-groups]
+dev = [
+  "pytest==9.1.1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/go1_core"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "reference: requires canonical external 400M checkpoint artifacts",
+]

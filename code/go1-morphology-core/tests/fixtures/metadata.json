@@ -1,0 +1,144 @@
+{
+  "actions_expression": "ppo_networks.make_inference_fn(networks)(params, deterministic=True)(observation, PRNGKey(0))",
+  "arrays": {
+    "gcn_match_lower_actions.npy": {
+      "dtype": "float32",
+      "npy_sha256": "68cf9081405436d0243f93cae1a2de3c31829bf67cd43002bfcebed74efe0ada",
+      "raw_sha256": "6a62a63efbca5f3389b5c4f8f978b74eb9bbeca209c537d3c4ec64039cf27791",
+      "shape": [
+        3,
+        12
+      ]
+    },
+    "gcn_match_lower_logits.npy": {
+      "dtype": "float32",
+      "npy_sha256": "098779c17321c4ef5dd72c1ce68b5e8b38f3e234309cfafafb96e5887d4a6baa",
+      "raw_sha256": "b3655d22abe8c31200814681c3c5a28fd663a1e80947c574fb908b7030bb9f38",
+      "shape": [
+        3,
+        24
+      ]
+    },
+    "mlp_match_lower_actions.npy": {
+      "dtype": "float32",
+      "npy_sha256": "b1a2172ea3b004bd6fbb94b80d7eefa788034c776b3e83df2991961703f678a4",
+      "raw_sha256": "02fed7bf8226fe8169adcf44091caef8fc07f2875782cddeaaa7ecbe97e1948e",
+      "shape": [
+        3,
+        12
+      ]
+    },
+    "mlp_match_lower_logits.npy": {
+      "dtype": "float32",
+      "npy_sha256": "94958ac13e2e7635f8e492a62a2ba775ff694730f71e04d55ffd33d02e569b98",
+      "raw_sha256": "1ead175496f19fe0714a20aad600db60d2a7c429c02c173849c81024d17dcfe3",
+      "shape": [
+        3,
+        24
+      ]
+    },
+    "multirank_hodge_full_actions.npy": {
+      "dtype": "float32",
+      "npy_sha256": "588d58d7f2db9240851ae4e51fb120bcb8cd5f234bdb72c6cba7823f4c7a6f23",
+      "raw_sha256": "2ae3ac36ea0f0f196b658bfa9033d663d59c06c4a4bd2da1e5d40e5556f12adc",
+      "shape": [
+        3,
+        12
+      ]
+    },
+    "multirank_hodge_full_logits.npy": {
+      "dtype": "float32",
+      "npy_sha256": "2ea0e0354c467351f1e55e222890551ee275647317d5f47c46aa9e30419f06e1",
+      "raw_sha256": "ee82903f88aeac4283d2b74b2aec128bff2b021762cc741d42537104f1a7d864",
+      "shape": [
+        3,
+        24
+      ]
+    },
+    "multirank_hodge_lower_actions.npy": {
+      "dtype": "float32",
+      "npy_sha256": "27e116dfe6111dd0fe004b684a187b9d907de9ea0f627a955ec6197b19761566",
+      "raw_sha256": "7a4cce65ca72a186db24d63c4007e11ebea3f8ce088ebe8dba16dcd797bf03ed",
+      "shape": [
+        3,
+        12
+      ]
+    },
+    "multirank_hodge_lower_logits.npy": {
+      "dtype": "float32",
+      "npy_sha256": "ffc393132ffaf75d9962bce42e172c9f2f2cb844431345cefa09643ff16f2561",
+      "raw_sha256": "10a246a2d3386d3d264d15abe387e43dc0f00511aa5268fee37d392f47a73baf",
+      "shape": [
+        3,
+        24
+      ]
+    },
+    "native_mlp_actions.npy": {
+      "dtype": "float32",
+      "npy_sha256": "a28ecd24db859ec034270bd6eadb78995f3f5a21c23accc51b1a5b0b144fe692",
+      "raw_sha256": "3ea66a2265d76b58e22065a20f9725c537561b56fd5117d25a5d5c4ae7b6f22f",
+      "shape": [
+        3,
+        12
+      ]
+    },
+    "native_mlp_logits.npy": {
+      "dtype": "float32",
+      "npy_sha256": "5c029a79142dd31ba23d2f6b2126621f130e3ed27d897870896e6a9875629ef5",
+      "raw_sha256": "795befd2feba6bc1e0e623c77e4c3e30c3f2cb4552028b10ce2a74ba6dfaaf54",
+      "shape": [
+        3,
+        24
+      ]
+    },
+    "pointwise_match_lower_actions.npy": {
+      "dtype": "float32",
+      "npy_sha256": "00535822547bd03dcceaf3fd447b7c995b7ec766ab370334f77f03719786f04e",
+      "raw_sha256": "b9f25afdfec69fea69778ef68c49feec38d99c2861ac5359317703c8df3dc55b",
+      "shape": [
+        3,
+        12
+      ]
+    },
+    "pointwise_match_lower_logits.npy": {
+      "dtype": "float32",
+      "npy_sha256": "eb4ae68f84d1353bca562f9667a22e2505d315cb314bdc8c8dfc2650cfcff1bb",
+      "raw_sha256": "38b13d631db6e39988ef2958f5aa4c3f7cd43c570bbeaa4dc4bd80d28a934d4d",
+      "shape": [
+        3,
+        24
+      ]
+    },
+    "policy_probe_features.npy": {
+      "dtype": "float32",
+      "npy_sha256": "dadc626eac0b9a5460119d509c20413e4d664f5f861a0e451f99c3654240a5b7",
+      "raw_sha256": "ba0db70c441c7c8ab862e5cfd816f1841fe5b3451ee0b8f9585ad5027cd80082",
+      "shape": [
+        3,
+        12,
+        20
+      ]
+    },
+    "policy_probe_input.npy": {
+      "dtype": "float32",
+      "npy_sha256": "787abfda700ce0244b40469d7d419c9d6536d42b697d7b210a0fb8890093ce03",
+      "raw_sha256": "4dbe125f73f5977e9c6110b6ab11281425286a091380a2173911b5eaba7165d9",
+      "shape": [
+        3,
+        48
+      ]
+    }
+  },
+  "artifact_root_absolute": "/scratch/network/dy0130/morphology-playground-structured-ppo/artifacts/clean-model-weak-actuator-scratch-400m/1659809766f6aba43a1074cc332922317e9bec5a",
+  "artifact_root_source_relative": "artifacts/clean-model-weak-actuator-scratch-400m/1659809766f6aba43a1074cc332922317e9bec5a",
+  "checkpoint_step": 412876800,
+  "feature_expression": "claim1.networks.build_joint_features(policy_probe_input)",
+  "input_expression": "stack(zeros(48), linspace(-1,1,48), sin(arange(48))), float32",
+  "jax_backend": "cpu",
+  "logits_expression": "policy_network.apply(params[0], params[1], keyed_observation)",
+  "schema_version": 1,
+  "source_commit": "1659809766f6aba43a1074cc332922317e9bec5a",
+  "source_repository": "morphology-playground-marl",
+  "source_worktree": "/scratch/network/dy0130/worktrees/clean-model-unified-rhmp-fix",
+  "training_array": "3343705"
+}
