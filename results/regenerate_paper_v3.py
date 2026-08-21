@@ -236,14 +236,17 @@ def main() -> None:
           rows.append([model, mlabel, seed, step, reward])
     write_csv(OUT / out_name, ["model", "model_label", "seed", "environment_steps", "eval_episode_reward"], rows)
 
-  def plot_learning_curve(csv_path, out_name, title, ylabel):
+  def _load_learning_data(csv_path):
     data = {}
     with csv_path.open(newline="") as handle:
       for row in csv.DictReader(handle):
         per_seed = data.setdefault(row["model_label"], {})
         per_seed.setdefault(int(row["seed"]), []).append(
             (int(row["environment_steps"]), float(row["eval_episode_reward"])))
-    figure, axis = plt.subplots(figsize=(7.2, 4.6), constrained_layout=True)
+    return data
+
+  def _panel_curves(axis, data):
+    max_step = 0
     for label in MODEL_ORDER:
       seeds = data[label]
       steps = sorted({step for seed in seeds for step, _ in seeds[seed]})
@@ -253,18 +256,54 @@ def main() -> None:
       axis.plot(steps, means, **style, label=label, lw=1.8, ms=4)
       axis.fill_between(steps, np.asarray(means) - np.asarray(sds), np.asarray(means) + np.asarray(sds),
                         color=style["color"], alpha=0.15)
-    axis.set_xlabel("Environment steps")
-    axis.set_ylabel(ylabel)
-    axis.set_title(title)
-    axis.legend(frameon=False)
-    max_step = max(
-        step for per_seed in data.values() for points in per_seed.values() for step, _ in points
-    )
-    axis.set_xlim(0, max_step)
-    axis.margins(x=0.02)
-    figure.savefig(OUT / f"{out_name}.png", dpi=220)
-    figure.savefig(OUT / f"{out_name}.pdf")
-    plt.close(figure)
+      max_step = max(max_step, max(steps))
+    return max_step
+
+  def plot_learning_curve(csv_path, out_name, title, ylabel):
+    data = _load_learning_data(csv_path)
+    with plt.rc_context({
+        "font.size": 28,
+        "axes.labelsize": 30,
+        "axes.titlesize": 32,
+        "legend.fontsize": 26,
+        "xtick.labelsize": 24,
+        "ytick.labelsize": 24,
+    }):
+      figure, axis = plt.subplots(figsize=(11.2, 7.0), constrained_layout=True)
+      max_step = _panel_curves(axis, data)
+      axis.set_xlabel("Environment steps")
+      axis.set_ylabel(ylabel)
+      axis.set_title(title)
+      axis.legend(frameon=False)
+      axis.set_xlim(0, max_step)
+      axis.margins(x=0.02)
+      figure.savefig(OUT / f"{out_name}.png", dpi=220)
+      figure.savefig(OUT / f"{out_name}.pdf")
+      plt.close(figure)
+
+  def plot_learning_curve_combined(csv_paths, titles, out_name, ylabel):
+    panels = [_load_learning_data(path) for path in csv_paths]
+    with plt.rc_context({
+        "font.size": 18,
+        "axes.labelsize": 20,
+        "axes.titlesize": 22,
+        "legend.fontsize": 16,
+        "xtick.labelsize": 15,
+        "ytick.labelsize": 15,
+    }):
+      figure, axes = plt.subplots(1, 2, figsize=(7.2, 3.6), constrained_layout=True, sharex=True)
+      for axis, data, title in zip(axes, panels, titles):
+        max_step = _panel_curves(axis, data)
+        axis.set_title(title)
+        axis.set_xlabel("Environment steps")
+        axis.set_xlim(0, max_step)
+        axis.margins(x=0.02)
+        axis.ticklabel_format(style="sci", axis="x", scilimits=(8, 8))
+      axes[0].set_ylabel(ylabel)
+      axes[1].legend(frameon=False, loc="lower right")
+      figure.savefig(OUT / f"{out_name}.png", dpi=300)
+      figure.savefig(OUT / f"{out_name}.pdf")
+      plt.close(figure)
 
   healthy_progress = lambda model, seed: (
       EXP / "double-actuator-healthy" / model / f"seed-{seed}"
@@ -277,11 +316,18 @@ def main() -> None:
 
   learning_curve_csv(healthy_progress, "healthy", "learning_curves_healthy.csv")
   plot_learning_curve(OUT / "learning_curves_healthy.csv", "learning_curves_healthy",
-                      "Healthy-only training progress", "Eval episode reward")
+                      "Healthy regime", "Eval episode reward")
 
   learning_curve_csv(damage_progress, "damage", "learning_curves_damage.csv")
   plot_learning_curve(OUT / "learning_curves_damage.csv", "learning_curves_damage",
-                      "Damage-curriculum training progress", "Eval episode reward")
+                      "Degraded regime", "Eval episode reward")
+
+  plot_learning_curve_combined(
+      [OUT / "learning_curves_healthy.csv", OUT / "learning_curves_damage.csv"],
+      ["Healthy regime", "Degraded regime"],
+      "learning_curves_combined",
+      "Eval episode reward",
+  )
 
   def cell_b_heldout(model: str, seed: int) -> Path:
     return (
