@@ -1,8 +1,8 @@
 # Higher-Order Morphology Priors for Quadruped RL Under Actuator Degradation
 
-[Derek You](https://dh-you.github.io/)<sup>1</sup>, [Zafir Shamsi](https://www.zshamsi.com/)<sup>1</sup>, [Keqin Wang](https://keqinwang.github.io/)<sup>2</sup>, [Christine Allen-Blanchette](https://www.christineallenblanchette.com/)<sup>1</sup>
+[Derek You](https://dh-you.github.io/)<sup>1</sup>, [Zafir Shamsi](https://www.zshamsi.com/)<sup>2</sup>, [Keqin Wang](https://keqinwang.github.io/)<sup>3</sup>, [Christine Allen-Blanchette](https://www.christineallenblanchette.com/)<sup>3</sup>
 
-<sup>1</sup>University of Pennsylvania &nbsp;&middot;&nbsp; <sup>2</sup>Princeton University
+<sup>1</sup>Edison Academy Magnet School &nbsp;&middot;&nbsp; <sup>2</sup>South Brunswick High School &nbsp;&middot;&nbsp; <sup>3</sup>Princeton University
 
 **IROS Workshop on Biologically Inspired Locomotion, Planning, and Control (BLPC) 2026**
 
