@@ -95,6 +95,14 @@
     };
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    mjx-container[jax="CHTML"][display="true"] {
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      margin: 0.75em 0 !important;
+    }
+  </style>
 
   <!-- Structured Data for Academic Papers -->
   <script type="application/ld+json">
@@ -340,8 +348,10 @@
                 At each layer $\ell$ and rank $k \in \{0, 1, 2\}$, the actor combines <strong>same-rank Hodge Laplacian propagation</strong> $S_k$ with <strong>cross-rank incidence messages</strong> $C_k$:
               </p>
               <p>
-                $$L_k = \underbrace{B_k^\top B_k}_{L_k^{\mathrm{lower}}} + \underbrace{B_{k+1} B_{k+1}^\top}_{L_k^{\mathrm{upper}}}, \qquad S_k = L_k H_k, \qquad C_k = \underbrace{B_k^\top H_{k-1}}_{\text{from } k-1} + \underbrace{B_{k+1} H_{k+1}}_{\text{from } k+1},$$
-                $$M_k^{(\ell)} = \alpha_k^{(\ell)} S_k^{(\ell)} + \bigl(1 - \alpha_k^{(\ell)}\bigr) C_k^{(\ell)}, \qquad H_k^{(\ell+1)} = H_k^{(\ell)} + \operatorname{RMSNorm}\!\left(g_k^{(\ell)}\bigl(M_k^{(\ell)}\bigr)\right).$$
+                $$L_k = \underbrace{B_k^\top B_k}_{L_k^{\mathrm{lower}}} + \underbrace{B_{k+1} B_{k+1}^\top}_{L_k^{\mathrm{upper}}}, \qquad S_k = L_k H_k,$$
+                $$C_k = \underbrace{B_k^\top H_{k-1}}_{\text{from } k-1} + \underbrace{B_{k+1} H_{k+1}}_{\text{from } k+1},$$
+                $$M_k^{(\ell)} = \alpha_k^{(\ell)} S_k^{(\ell)} + \bigl(1 - \alpha_k^{(\ell)}\bigr) C_k^{(\ell)},$$
+                $$H_k^{(\ell+1)} = H_k^{(\ell)} + \operatorname{RMSNorm}\!\left(g_k^{(\ell)}\bigl(M_k^{(\ell)}\bigr)\right).$$
               </p>
               <p>
                 All five compared actors (<strong>MLP-C</strong>, <strong>MLP-D</strong>, <strong>GCN</strong>, <strong>Hodge-L</strong> over ranks 0&ndash;1, and <strong>Hodge-F</strong> over ranks 0&ndash;2) are capacity-matched within 0.5% of 171,296 parameters and share an identical privileged PPO critic $V_\phi(o_t^{\mathrm{priv}})$ and 400M-step training budget across seeds $\{11, 12, 13\}$.
