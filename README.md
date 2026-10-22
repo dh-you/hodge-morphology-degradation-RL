@@ -1,9 +1,9 @@
 # Higher-Order Morphology Priors for Quadruped Reinforcement Learning Under Actuator Degradation
 
-**[Derek You](https://github.com/dh-you)<sup>*1</sup>, Zafir Shamsi<sup>*2</sup>, Keqin Wang<sup>*&dagger;3</sup>, [Christine Allen-Blanchette](https://cablanchette.github.io/)<sup>&dagger;3</sup>**
+**[Derek You](https://github.com/dh-you)<sup>&#42;1</sup>, Zafir Shamsi<sup>&#42;2</sup>, [Keqin Wang](https://mae.princeton.edu/people/graduate-students/wang)<sup>&#42;&dagger;3</sup>, [Christine Allen-Blanchette](https://cablanc.github.io/)<sup>&dagger;3</sup>**
 
 <sup>1</sup>Edison Academy Magnet School &nbsp;&middot;&nbsp; <sup>2</sup>South Brunswick High School &nbsp;&middot;&nbsp; <sup>3</sup>Princeton University  
-<sub><sup>*</sup>Equal contribution. Work done during the Princeton Laboratory Learning Program. &nbsp;&middot;&nbsp; <sup>&dagger;</sup>Correspondence: `{keqin.wang, ca15}@princeton.edu`</sub>
+<sub><sup>&#42;</sup>Equal contribution. Work done during the Princeton Laboratory Learning Program. &nbsp;&middot;&nbsp; <sup>&dagger;</sup>Correspondence: `keqin.wang@princeton.edu`, `ca15@princeton.edu`</sub>
 
 **[IROS 2026 Workshop on Hybrid Architectures for Embodied Autonomy: Bridging Learning, Planning, and Control (BLPC 2026)](https://sites.google.com/bu.edu/hybridarchforautonomy) — Spotlight Paper**
 

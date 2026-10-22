@@ -84,6 +84,18 @@
   <script defer src="static/js/bulma-slider.min.js"></script>
   <script defer src="static/js/index.js"></script>
 
+  <!-- MathJax for LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
   <!-- Structured Data for Academic Papers -->
   <script type="application/ld+json">
   {
@@ -188,10 +200,10 @@
                   Zafir Shamsi<sup>*2</sup>,
                 </span>
                 <span class="author-block">
-                  Keqin Wang<sup>*&dagger;3</sup>,
+                  <a href="https://mae.princeton.edu/people/graduate-students/wang" target="_blank">Keqin Wang</a><sup>*&dagger;3</sup>,
                 </span>
                 <span class="author-block">
-                  <a href="https://cablanchette.github.io/" target="_blank">Christine Allen-Blanchette</a><sup>&dagger;3</sup>
+                  <a href="https://cablanc.github.io/" target="_blank">Christine Allen-Blanchette</a><sup>&dagger;3</sup>
                 </span>
               </div>
 
@@ -278,8 +290,8 @@
               <h2 class="subtitle has-text-centered" style="margin-top: 1.25rem; font-size: 1rem; color: var(--text-secondary);">
                 <strong>Node-edge-face Hodge actor.</strong>
                 <strong>Left:</strong> the policy observes trunk velocity, angular velocity, projected gravity, and joint-wise angle, velocity, and previous action.
-                <strong>Centre:</strong> these signals and the velocity command form <em>o<sub>t</sub></em> &isin; &Ropf;<sup>48</sup> and are reshaped into joint-wise features <em>X<sub>t</sub></em> &isin; &Ropf;<sup>12&times;20</sup>.
-                <strong>Right:</strong> <em>X<sub>t</sub></em> initializes node, edge, and face states <em>H</em><sub>0</sub> &isin; &Ropf;<sup>12&times;<em>d</em></sup>, <em>H</em><sub>1</sub> &isin; &Ropf;<sup>16&times;<em>d</em></sup>, and <em>H</em><sub>2</sub> &isin; &Ropf;<sup>5&times;<em>d</em></sup>. Each Hodge block performs same-rank message passing through Hodge operators and cross-rank communication through incidence matrices <em>B</em><sub>1</sub> and <em>B</em><sub>2</sub>.
+                <strong>Centre:</strong> these signals and the velocity command form $o_t \in \mathbb{R}^{48}$ and are reshaped into joint-wise features $X_t \in \mathbb{R}^{12 \times 20}$.
+                <strong>Right:</strong> $X_t$ initializes node, edge, and face states $H_0 \in \mathbb{R}^{12 \times d}$, $H_1 \in \mathbb{R}^{16 \times d}$, and $H_2 \in \mathbb{R}^{5 \times d}$. Each Hodge block performs same-rank message passing through the corresponding Hodge operators and cross-rank communication through incidence matrices $B_1$ and $B_2$. After $L$ residual blocks, the rank-0 states are decoded by a shared actor head to parameterize the joint action $a_t \in \mathbb{R}^{12}$.
               </h2>
             </div>
           </div>
@@ -319,16 +331,20 @@
           <div class="column is-7">
             <div class="content has-text-justified">
               <p>
-                Most morphology-aware policies represent a quadruped as a classical graph of joints (0-cells) and links (1-cells). At a higher level, however, joints form persistent mechanical units: each three-joint leg acts jointly to place a foot, and the four hips form a rigid coplanar ring. We promote these closed cycles to explicit <strong>rank-2 cells (faces)</strong>, yielding a cell complex with 12 nodes, 16 edges, and 5 faces coupled by oriented incidence matrices <em>B</em><sub>1</sub> &isin; &Ropf;<sup>12&times;16</sup> and <em>B</em><sub>2</sub> &isin; &Ropf;<sup>16&times;5</sup>.
+                Most morphology-aware policies represent a quadruped as a classical graph of joints (0-cells) and links (1-cells). At a higher level, however, joints form persistent mechanical units: each three-joint leg acts jointly to place a foot, and the four hips form a rigid coplanar ring. We promote these closed cycles to explicit <strong>rank-2 cells (faces)</strong>, yielding a cell complex with $|\mathcal{X}_0|=12$ nodes, $|\mathcal{X}_1|=16$ edges, and $|\mathcal{X}_2|=5$ faces coupled by oriented incidence matrices $B_1 \in \mathbb{R}^{12 \times 16}$ and $B_2 \in \mathbb{R}^{16 \times 5}$:
               </p>
               <p>
-                At each layer &ell; and rank <em>k</em> &isin; {0, 1, 2}, the actor combines <strong>same-rank Hodge Laplacian propagation</strong> with <strong>cross-rank incidence messages</strong>:
+                $$H_0 \;\overset{B_1^\top}{\underset{B_1}{\rightleftarrows}}\; H_1 \;\overset{B_2^\top}{\underset{B_2}{\rightleftarrows}}\; H_2.$$
               </p>
-              <pre style="text-align: center; font-size: 0.95rem;"><code>L_k = B_k&#x1D40; B_k + B_{k+1} B_{k+1}&#x1D40;,    S_k = L_k H_k
-C_k = B_k&#x1D40; H_{k-1} + B_{k+1} H_{k+1}
-M_k^(&ell;) = &alpha;_k^(&ell;) S_k^(&ell;) + (1 - &alpha;_k^(&ell;)) C_k^(&ell;)</code></pre>
               <p>
-                All five compared actors (<strong>MLP-C</strong>, <strong>MLP-D</strong>, <strong>GCN</strong>, <strong>Hodge-L</strong> over ranks 0&ndash;1, and <strong>Hodge-F</strong> over ranks 0&ndash;2) are capacity-matched within 0.5% of 171,296 parameters and share an identical privileged PPO critic and 400M-step training budget across seeds {11, 12, 13}.
+                At each layer $\ell$ and rank $k \in \{0, 1, 2\}$, the actor combines <strong>same-rank Hodge Laplacian propagation</strong> $S_k$ with <strong>cross-rank incidence messages</strong> $C_k$:
+              </p>
+              <p>
+                $$L_k = \underbrace{B_k^\top B_k}_{L_k^{\mathrm{lower}}} + \underbrace{B_{k+1} B_{k+1}^\top}_{L_k^{\mathrm{upper}}}, \qquad S_k = L_k H_k, \qquad C_k = \underbrace{B_k^\top H_{k-1}}_{\text{from } k-1} + \underbrace{B_{k+1} H_{k+1}}_{\text{from } k+1},$$
+                $$M_k^{(\ell)} = \alpha_k^{(\ell)} S_k^{(\ell)} + \bigl(1 - \alpha_k^{(\ell)}\bigr) C_k^{(\ell)}, \qquad H_k^{(\ell+1)} = H_k^{(\ell)} + \operatorname{RMSNorm}\!\left(g_k^{(\ell)}\bigl(M_k^{(\ell)}\bigr)\right).$$
+              </p>
+              <p>
+                All five compared actors (<strong>MLP-C</strong>, <strong>MLP-D</strong>, <strong>GCN</strong>, <strong>Hodge-L</strong> over ranks 0&ndash;1, and <strong>Hodge-F</strong> over ranks 0&ndash;2) are capacity-matched within 0.5% of 171,296 parameters and share an identical privileged PPO critic $V_\phi(o_t^{\mathrm{priv}})$ and 400M-step training budget across seeds $\{11, 12, 13\}$.
               </p>
             </div>
           </div>
@@ -343,7 +359,7 @@ M_k^(&ell;) = &alpha;_k^(&ell;) S_k^(&ell;) + (1 - &alpha;_k^(&ell;)) C_k^(&ell;
         <h2 class="title is-3 has-text-centered">Experimental Results</h2>
         <div class="content has-text-justified">
           <p>
-            We evaluate policies across two training and evaluation regimes on the MuJoCo Playground <code>Go1JoystickFlatTerrain</code> task: the <strong>Healthy regime (<em>H</em>)</strong> with nominal actuation (&rho;<sub><em>i</em></sub> = 1) and the <strong>Degraded regime (<em>D</em>)</strong> where two actuators are simultaneously degraded across 44 training and 22 held-out joint pairs.
+            We model degradation of actuator $i$ by scaling its nominal torque limit $\tau_i^{\mathrm{max}}(\rho_i) = \rho_i \tau_i^{\mathrm{max,nom}}$ with $\rho_i \in [0, 1]$, and evaluate policies across two training and evaluation regimes on the MuJoCo Playground <code>Go1JoystickFlatTerrain</code> task: the <strong>Healthy regime ($H$)</strong> with $\rho_i = 1$ and the <strong>Degraded regime ($D$)</strong> where two actuators are degraded at a time across $\binom{12}{2} = 66$ unordered pairs (split into 44 training and 22 held-out pairs).
           </p>
         </div>
 
@@ -358,22 +374,22 @@ M_k^(&ell;) = &alpha;_k^(&ell;) S_k^(&ell;) + (1 - &alpha;_k^(&ell;)) C_k^(&ell;
 
         <!-- Table I -->
         <div class="content" style="margin-top: 2rem;">
-          <h4 class="title is-5 has-text-centered">Table I: In-Regime Evaluation Results (<em>H</em> &rarr; <em>H</em> and <em>D</em> &rarr; <em>D</em>)</h4>
+          <h4 class="title is-5 has-text-centered">Table I: In-Regime Evaluation Results ($H \to H$ and $D \to D$)</h4>
           <div class="table-container">
             <table class="table is-bordered is-striped is-hoverable is-fullwidth has-text-centered">
               <thead>
                 <tr>
                   <th rowspan="2" style="vertical-align: middle;">Actor</th>
-                  <th colspan="3"><em>H</em> &rarr; <em>H</em> (Healthy Training &amp; Eval)</th>
-                  <th colspan="3"><em>D</em> &rarr; <em>D</em> (Degraded Training &amp; Held-Out Eval)</th>
+                  <th colspan="3">$H \to H$ (Healthy Training &amp; Eval)</th>
+                  <th colspan="3">$D \to D$ (Degraded Training &amp; Held-Out Eval)</th>
                 </tr>
                 <tr>
-                  <th>Return &uarr;</th>
-                  <th>Survival &uarr;</th>
-                  <th>Vel. RMSE &darr;</th>
-                  <th>Return &uarr;</th>
-                  <th>Survival &uarr;</th>
-                  <th>Vel. RMSE &darr;</th>
+                  <th>Return $\uparrow$</th>
+                  <th>Survival $\uparrow$</th>
+                  <th>Vel. RMSE $\downarrow$</th>
+                  <th>Return $\uparrow$</th>
+                  <th>Survival $\uparrow$</th>
+                  <th>Vel. RMSE $\downarrow$</th>
                 </tr>
               </thead>
               <tbody>
@@ -429,22 +445,22 @@ M_k^(&ell;) = &alpha;_k^(&ell;) S_k^(&ell;) + (1 - &alpha;_k^(&ell;)) C_k^(&ell;
 
         <!-- Table II -->
         <div class="content" style="margin-top: 2rem;">
-          <h4 class="title is-5 has-text-centered">Table II: Cross-Regime Evaluation Results (<em>H</em> &rarr; <em>D</em> and <em>D</em> &rarr; <em>H</em>)</h4>
+          <h4 class="title is-5 has-text-centered">Table II: Cross-Regime Evaluation Results ($H \to D$ and $D \to H$)</h4>
           <div class="table-container">
             <table class="table is-bordered is-striped is-hoverable is-fullwidth has-text-centered">
               <thead>
                 <tr>
                   <th rowspan="2" style="vertical-align: middle;">Actor</th>
-                  <th colspan="3"><em>H</em> &rarr; <em>D</em> (Zero-Shot Degradation)</th>
-                  <th colspan="3"><em>D</em> &rarr; <em>H</em> (Degradation-Trained on Nominal)</th>
+                  <th colspan="3">$H \to D$ (Zero-Shot Degradation)</th>
+                  <th colspan="3">$D \to H$ (Degradation-Trained on Nominal)</th>
                 </tr>
                 <tr>
-                  <th>Return &uarr;</th>
-                  <th>Survival &uarr;</th>
-                  <th>Vel. RMSE &darr;</th>
-                  <th>Return &uarr;</th>
-                  <th>Survival &uarr;</th>
-                  <th>Vel. RMSE &darr;</th>
+                  <th>Return $\uparrow$</th>
+                  <th>Survival $\uparrow$</th>
+                  <th>Vel. RMSE $\downarrow$</th>
+                  <th>Return $\uparrow$</th>
+                  <th>Survival $\uparrow$</th>
+                  <th>Vel. RMSE $\downarrow$</th>
                 </tr>
               </thead>
               <tbody>
@@ -502,7 +518,7 @@ M_k^(&ell;) = &alpha;_k^(&ell;) S_k^(&ell;) + (1 - &alpha;_k^(&ell;)) C_k^(&ell;
           <div class="column is-full has-text-centered publication-body">
             <img src="results/h_to_d_vs_d_to_d_diagonal.png" alt="Severity sweep comparison between H to D and D to D" style="width: 100%;" />
             <p class="is-size-6 has-text-grey" style="margin-top: 0.75rem;">
-              <strong>Severity Sweep (<em>H</em> &rarr; <em>D</em> vs. <em>D</em> &rarr; <em>D</em>):</strong> Across held-out compound actuator degradations, <strong>Hodge-F</strong> maintains higher return, higher survival rate, and lower velocity tracking error than all baselines.
+              <strong>Severity Sweep ($H \to D$ vs. $D \to D$):</strong> Across held-out compound actuator degradations, <strong>Hodge-F</strong> maintains higher return, higher survival rate, and lower velocity tracking error than all baselines.
             </p>
           </div>
         </div>
