@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Higher-Order Morphology Priors for Quadruped RL Under Actuator Degradation</title>
+  <meta name="description" content="Hodge-based message passing over cell complexes improves learning and generalization under actuator degradation on the Unitree Go1 quadruped. IROS Workshop BLPC 2026.">
+  <meta name="keywords" content="reinforcement learning, quadruped locomotion, actuator degradation, Hodge decomposition, morphology-aware policies, graph neural networks">
+  <meta name="authors" content="Derek You, Zafir Shamsi, Keqin Wang, Christine Allen-Blanchette">
+
+  <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Higher-Order Morphology Priors for Quadruped RL Under Actuator Degradation">
+  <meta name="twitter:description" content="Hodge-based message passing over cell complexes improves learning and generalization under actuator degradation on the Unitree Go1 quadruped.">
+  <meta name="twitter:image" content="https://dh-you.github.io/hodge-morphology-degradation-RL/static/images/social_preview.png">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Higher-Order Morphology Priors for Quadruped RL Under Actuator Degradation">
+  <meta property="og:description" content="Hodge-based message passing over cell complexes improves learning and generalization under actuator degradation on the Unitree Go1 quadruped.">
+  <meta property="og:image" content="https://dh-you.github.io/hodge-morphology-degradation-RL/static/images/social_preview.png">
+  <meta property="og:url" content="https://dh-you.github.io/hodge-morphology-degradation-RL/">
+
+  <!-- Google Scholar -->
+  <meta name="google-site-verification" content="">
+  <meta name="citation_title" content="Higher-Order Morphology Priors for Quadruped Reinforcement Learning Under Actuator Degradation">
+  <meta name="citation_author" content="Derek You">
+  <meta name="citation_author" content="Zafir Shamsi">
+  <meta name="citation_author" content="Keqin Wang">
+  <meta name="citation_author" content="Christine Allen-Blanchette">
+  <meta name="citation_publication_date" content="2026/10/07">
+  <meta name="citation_conference" content="IROS Workshop on Biologically Inspired Locomotion, Planning, and Control (BLPC) 2026">
+  <meta name="citation_pdf_url" content="https://arxiv.org/pdf/2610.10934">
+  <meta name="citation_arxiv_id" content="2610.10934">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "Higher-Order Morphology Priors for Quadruped Reinforcement Learning Under Actuator Degradation",
+    "author": [
+      {"@type": "Person", "name": "Derek You"},
+      {"@type": "Person", "name": "Zafir Shamsi"},
+      {"@type": "Person", "name": "Keqin Wang"},
+      {"@type": "Person", "name": "Christine Allen-Blanchette"}
+    ],
+    "datePublished": "2026-10-07",
+    "description": "Hodge-based message passing over cell complexes improves learning and generalization under actuator degradation on the Unitree Go1 quadruped.",
+    "url": "https://arxiv.org/abs/2610.10934"
+  }
+  </script>
+
+  <style>
+    /* Reset */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Google Sans', 'Source Sans Pro', sans-serif;
+      color: #333;
+      background: #fff;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    /* Title */
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+
+    /* Authors */
+    .authors {
+      text-align: center;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    .authors a {
+      color: #368be6;
+      text-decoration: none;
+    }
+    .authors a:hover { text-decoration: underline; }
+
+    .affiliations {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    /* Venue */
+    .venue {
+      text-align: center;
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #c40003;
+      margin-bottom: 24px;
+    }
+
+    /* Links */
+    .links {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      background: #333;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .link-btn:hover { background: #555; text-decoration: none; }
+    .link-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* Teaser */
+    .teaser {
+      max-width: 900px;
+      margin: 0 auto 40px;
+    }
+    .teaser img {
+      width: 100%;
+      border-radius: 6px;
+    }
+    .teaser-caption {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 10px;
+    }
+
+    /* Sections */
+    .section {
+      max-width: 800px;
+      margin: 0 auto 40px;
+    }
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 24px 0 12px;
+    }
+    p { margin-bottom: 12px; }
+
+    /* Abstract */
+    .abstract {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      text-align: justify;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background: #f5f5f5;
+      font-weight: 600;
+    }
+    tr:nth-child(even) { background: #fafafa; }
+    .table-caption {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    /* BibTeX */
+    .bibtex {
+      background: #f8f8f8;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 16px;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      position: relative;
+    }
+    .bibtex-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 4px 12px;
+      border: none;
+      border-radius: 4px;
+      background: #333;
+      color: #fff;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .bibtex-btn:hover { background: #555; }
+
+    /* Results highlight */
+    .result-highlight {
+      background: #f0f7ff;
+      border-left: 4px solid #368be6;
+      padding: 12px 16px;
+      margin: 16px 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .result-highlight strong { color: #1a5f8b; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.5rem; }
+      .container { padding: 40px 16px 60px; }
+      .links { gap: 8px; }
+      .link-btn { padding: 6px 14px; font-size: 0.85rem; }
+      table { font-size: 0.8rem; }
+      th, td { padding: 6px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Title -->
+    <h1>Higher-Order Morphology Priors for Quadruped Reinforcement Learning Under Actuator Degradation</h1>
+
+    <!-- Authors -->
+    <div class="authors">
+      <a href="https://dh-you.github.io/">Derek You</a><sup>1</sup>,
+      <a href="https://www.zshamsi.com/">Zafir Shamsi</a><sup>1</sup>,
+      <a href="https://keqinwang.github.io/">Keqin Wang</a><sup>2</sup>,
+      <a href="https://www.christineallenblanchette.com/">Christine Allen-Blanchette</a><sup>1</sup>
+    </div>
+
+    <!-- Affiliations -->
+    <div class="affiliations">
+      <sup>1</sup>University of Pennsylvania, <sup>2</sup>Princeton University
+    </div>
+
+    <!-- Venue -->
+    <div class="venue">IROS Workshop on Biologically Inspired Locomotion, Planning, and Control (BLPC) 2026</div>
+
+    <!-- Links -->
+    <div class="links">
+      <a class="link-btn" href="https://arxiv.org/abs/2610.10934" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm7 14l5-5h-3V9h-4v3H7l5 5z"/></svg>
+        arXiv
+      </a>
+      <a class="link-btn" href="https://arxiv.org/pdf/2610.10934" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V9h7v5h5v6H6z"/></svg>
+        PDF
+      </a>
+      <a class="link-btn" href="https://github.com/dh-you/hodge-morphology-degradation-RL" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        Code
+      </a>
+      <a class="link-btn" href="https://github.com/dh-you/hodge-morphology-degradation-RL" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+        Models
+      </a>
+    </div>
+
+    <!-- Teaser -->
+    <div class="teaser">
+      <img src="results/h_to_d_vs_d_to_d_diagonal.png" alt="Comparison of learned damage generalization (D→D) vs zero-shot robustness (H→D) across severity sweeps for all five model architectures. Hodge-F (rank-2 Hodge) achieves the highest return, survival, and lowest tracking error across all degradation severities.">
+      <p class="teaser-caption">Hodge-F (rank-2 Hodge) dominates every robustness metric across all degradation severities compared to MLP, GCN, and rank-1 Hodge baselines.</p>
+    </div>
+
+    <!-- Abstract -->
+    <div class="section">
+      <h2>Abstract</h2>
+      <p class="abstract">
+        Actuator degradation turns quadruped locomotion into a coordination problem requiring joints to compensate for lost actuation.
+        Prior work suggests that morphology-aware graph policies improve learning and generalization under body perturbations.
+        We ask whether these benefits can be strengthened by explicitly modeling higher-order mechanical structure.
+        We represent the Unitree Go1 as a cell complex with limb- and body-level rank-2 cells and apply Hodge-based message passing.
+        Under degradation training, the node-edge-face Nodge actor achieves the highest return on unseen actuator degradations, with higher survival and lower velocity-tracking error.
+        These results support higher-order morphology as a useful inductive bias for whole-body compensation under actuator degradation.
+      </p>
+    </div>
+
+    <!-- 2x2 Study Design -->
+    <div class="section">
+      <h2>Study Design</h2>
+      <p class="table-caption">Table 1: Double-actuator 2×2 evaluation cells.</p>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Healthy Evaluation</th>
+            <th>Held-out Compound-Damage Evaluation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Healthy-only Training</strong></td>
+            <td><strong>Cell A</strong> (nominal capacity)</td>
+            <td><strong>Cell B</strong> (zero-shot robustness, H → D)</td>
+          </tr>
+          <tr>
+            <td><strong>Damage Curriculum</strong></td>
+            <td><strong>Cell C</strong> (damage-trained nominal)</td>
+            <td><strong>Cell D</strong> (learned damage generalization, D → D)</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Cell D is the frozen primary experiment. Cells A–C are descriptive post-D controls. All metrics are plain arithmetic averages across 3 seeds.</p>
+    </div>
+
+    <!-- Key Results -->
+    <div class="section">
+      <h2>Key Results</h2>
+      <p class="table-caption">Table 2: Cell D (held-out damage evaluation) — mean ± SD across 3 seeds.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Return &uarr;</th>
+            <th>Survival &uarr;</th>
+            <th>Vel RMSE &darr;</th>
+            <th>Yaw RMSE &darr;</th>
+            <th>Power</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MLP-C</td>
+            <td>19.98</td>
+            <td>0.88</td>
+            <td>0.32</td>
+            <td>0.30</td>
+            <td>13.34</td>
+          </tr>
+          <tr>
+            <td>MLP-D</td>
+            <td>18.15</td>
+            <td>0.82</td>
+            <td>0.32</td>
+            <td>0.31</td>
+            <td>14.52</td>
+          </tr>
+          <tr>
+            <td>GCN</td>
+            <td>15.35</td>
+            <td>0.73</td>
+            <td>0.34</td>
+            <td>0.51</td>
+            <td>7.41</td>
+          </tr>
+          <tr>
+            <td>Hodge-L</td>
+            <td>18.61</td>
+            <td>0.83</td>
+            <td>0.32</td>
+            <td>0.41</td>
+            <td>9.79</td>
+          </tr>
+          <tr>
+            <td><strong>Hodge-F</strong></td>
+            <td><strong>22.40</strong></td>
+            <td><strong>0.94</strong></td>
+            <td><strong>0.25</strong></td>
+            <td><strong>0.16</strong></td>
+            <td>31.22</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="result-highlight">
+        Hodge-F (rank-2 Hodge) dominates every robustness metric at the cost of approximately 3x the mechanical power of the most efficient baseline (GCN).
+      </div>
+    </div>
+
+    <!-- Model Architectures -->
+    <div class="section">
+      <h2>Model Architectures</h2>
+      <p class="table-caption">Table 3: Five capacity-matched actors (all within 0.5% of 171,296 parameters).</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Label</th>
+            <th>Canonical Name</th>
+            <th>Family</th>
+            <th>Params</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MLP-C</td>
+            <td><code>native_mlp_w480_240_120</code></td>
+            <td>Centralized MLP</td>
+            <td>170,784</td>
+          </tr>
+          <tr>
+            <td>MLP-D</td>
+            <td><code>pointwise_w252</code></td>
+            <td>Decentralized (joint) MLP</td>
+            <td>171,478</td>
+          </tr>
+          <tr>
+            <td>GCN</td>
+            <td><code>gcn_w1107</code></td>
+            <td>Graph Convolution</td>
+            <td>171,361</td>
+          </tr>
+          <tr>
+            <td>Hodge-L</td>
+            <td><code>multirank_hodge_lower_w177</code></td>
+            <td>Rank-1 Hodge</td>
+            <td>171,705</td>
+          </tr>
+          <tr>
+            <td>Hodge-F</td>
+            <td><code>multirank_hodge_full_w150</code></td>
+            <td>Rank-2 Hodge</td>
+            <td>171,296</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Structured actors (MLP-D, GCN, Hodge-L, Hodge-F) share a frozen simplicial-complex topology of the Go1's 12 joints (16 edges, 5 faces) with incidence matrices B<sub>1</sub> and B<sub>2</sub>. Hodge models propagate over rank-0/1 (L) and rank-0/1/2 (F) cochains.</p>
+    </div>
+
+    <!-- Citation -->
+    <div class="section">
+      <h2>Citation</h2>
+      <div class="bibtex">
+        <button class="bibtex-btn" onclick="copyBibtex()">Copy</button>
+<pre id="bibtex">@article{you2026higherorder,
+  title={Higher-Order Morphology Priors for Quadruped Reinforcement Learning Under Actuator Degradation},
+  author={You, Derek and Shamsi, Zafir and Wang, Keqin and Allen-Blanchette, Christine},
+  journal={arXiv preprint arXiv:2610.10934},
+  year={2026},
+  note={Accepted to IROS Workshop BLPC 2026}
+}</pre>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function copyBibtex() {
+      const text = document.getElementById('bibtex').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.bibtex-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>
