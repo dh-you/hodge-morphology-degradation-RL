@@ -4,7 +4,7 @@
 
 <sup>1</sup>Edison Academy Magnet School &nbsp;&middot;&nbsp; <sup>2</sup>South Brunswick High School &nbsp;&middot;&nbsp; <sup>3</sup>Princeton University
 
-**IROS Workshop on Biologically Inspired Locomotion, Planning, and Control (BLPC) 2026**
+**IROS Workshop on Biologically Inspired Locomotion, Planning, and Control (BLPC) 2026** — ⭐ **Spotlight Paper**
 
 [![arXiv](https://img.shields.io/badge/arXiv-2610.10934-b31b1b)](https://arxiv.org/abs/2610.10934)
 [![Project Page](https://img.shields.io/badge/Project-Page-4488ff)](https://dh-you.github.io/hodge-morphology-degradation-RL/)
